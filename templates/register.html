@@ -1,43 +1,6 @@
 {% extends "base.html" %} {% block title %}Index{% endblock %} {% block head %}
 {{ super() }}
 
-<!-- <style type="text/css">
-  .important {
-    color: #336699;
-  }
-
-  .section {
-    max-width: 550px;
-    height: 500px;
-  
-
-    margin: 200px auto;
-    border: 1px solid #ccc;
-
-    padding: 0px;
-  }
-
-  .container {
-    display: inline-block;
-    vertical-align: middle;
-    width: 350px;
-    padding-top: 125px;
-    
-  }
-
-  .button {
-    margin: auto;
-    width: 170px;
-  }
-  #userpw {
-    margin-right: 10px;
-
-  }
-
-  .is-hidden {
-        display: none!important;
-  }
-</style> -->
 {% endblock %} {% block content %}  {% block navbar %} {% endblock %}
 
         <!-- Webpage Title -->
@@ -57,8 +20,11 @@
         <script>
             // 간단한 회원가입 함수입니다.
             // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
+
+            
+
             function register() {
-                
+
                 $.ajax({
                     type: "POST",
                     url: "/api/register",
@@ -66,14 +32,6 @@
                         id_give: $('#userid').val(),
                         pw_give: $('#userpw').val(),
                         nickname_give: $('#usernick').val()
-                    },
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            alert('회원가입이 완료되었습니다.')
-                            window.location.href = '/login'
-                        } else {
-                            alert(response['msg'])
-                        }
                     }
                 })
             }
@@ -93,77 +51,51 @@
             
             //password 아직 적용 안 됨
             function is_nickname(asValue) {
-                var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+                let regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
                 return regExp.test(asValue);
             }
             
             function is_password(asValue) {
-                var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+                let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
                 return regExp.test(asValue);
             }
+            
             //password 재확인
+            function validation() {
+                let password = $("#userpw").val();
+                let samePassword = $("#userpw2").val();
 
+                if (password === samePassword) {
+                    alert('회원가입이 완료되었습니다.')
+                    window.location.href ='/login'
+                    return false;
+                } else {
+                    alert('패스워드가 일치하지 않습니다.')
+                    return false;
+                }
+            }
         </script>
-    
+
+        <!-- 회원가입 박스 -->
         <div class="section has-text-centered" style="padding: 0px">
-            <!-- <h1 class="title">회원가입 페이지</h1> -->
             <div class="container">
                 <div class="field is-horizontal">
-                    <!-- <div class="field-label is-normal"> -->
-                        <!-- <label class="label" for="userid">ID</label>
-                    </div> -->
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
-                                       placeholder="ID">
-                            </div>
-                            <p class="register-font">
-                                * 아이디는 1-15자의 영문과 숫자와 일부특수문자(._-)만 입력 가능합니다.
-                            </p>
-                        </div>
+                    <form name="joinform" class="userjoin" action="/register" method="post" onsubmit="return validation()">
+                        <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                                    placeholder="ID" minlength="3" maxlength="15" required>
+                        <span class="check">
+                            * 아이디는 3~15자의 대소문자, 숫자로 입력 가능합니다.
+                        </span>
+                        <input type="password" class="input" id="userpw" placeholder="Create password" minlength="8" maxlength="20" required>
+                        <input type="password" class="input" id="userpw2" placeholder="Confirm password" minlength="8" maxlength="20" required="required" onkeyup="checkConfirmPass(this.value)">
+                        <span class="check" id="check2">
+                            * 비밀번호는 8~20자의 대소문자, 숫자로 입력 가능합니다.
+                        </span>
+                        <input type="text" class="input" id="usernick" placeholder="Nickname" maxlength="10">
                     </div>
-                </div>
-                <div class="field is-horizontal">
-                    <!-- <div class="field-label is-normal">
-                        <label class="label" for="userpw">PW</label>
-                    </div> -->
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="password" class="input" id="userpw" placeholder="Create password">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <!-- <div class="field-label is-normal">
-                      <label class="label" for="userpw">PW</label>
-                    </div> -->
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                              <input type="password" class="input" id="userpw2" placeholder="Confirm password">
-                            </div>
-                            <p>
-                            * 영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.<br>특수문자(!@#$%^&*)도 사용 가능합니다.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <!-- <div class="field-label is-normal">
-                        <label class="label" for="usernick">NICKNAME</label>
-                    </div> -->
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="usernick" placeholder="Nickname">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="button is-primary" onclick="register()">회원가입</button>
+                    <button class="button is-primary" onclick="register()" type="submit">회원가입</button>
+                    
+                </form>
                 <button class="button is-primary" href="/login">취소</button>
             </div>
         </div>
