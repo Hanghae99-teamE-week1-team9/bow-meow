@@ -67,12 +67,17 @@
 
                 if (password === samePassword) {
                     alert('회원가입이 완료되었습니다.')
-                    window.location.href ='/login'
+                    window.location.href ='/auth/login'
                     return false;
                 } else {
                     alert('패스워드가 일치하지 않습니다.')
                     return false;
                 }
+            }
+
+            // 로그인 페이지로 이동
+            function goToLoginPage() {
+                window.location.href = '/auth/login'
             }
         </script>
 
@@ -96,7 +101,7 @@
                     <button class="button is-primary" onclick="register()" type="submit">회원가입</button>
                     
                 </form>
-                <button class="button is-primary" href="/login">취소</button>
+                <button class="button is-primary" onclick="goToLoginPage()">취소</button>
             </div>
         </div>
     
