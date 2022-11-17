@@ -68,9 +68,6 @@ head %} {{ super() }}
 {% endblock %} {% block content %} {% block navbar %}{% endblock %}
 <!--images-->
 <div class="image-box">
-  <a href="/api/files/{{ data.petInfo.imageFileId }}"
-    >{{ data.petInfo.imageFileId }}</a
-  >
   {% if data.petInfo.imageUrl %}
   <img
     src="{{ data.petInfo.imageUrl }}"

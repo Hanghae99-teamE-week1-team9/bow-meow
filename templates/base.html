@@ -36,7 +36,7 @@
     {% endblock %}
   </head>
 
-  <body>
+  <body class="d-flex flex-column h-100">
     <nav class="navbar navbar-expand-sm bg-success navbar-dark">
       <!--brand logo-->
       <a class="navbar-brand" href="/">
@@ -47,7 +47,7 @@
           class="d-inline-block align-top"
           alt=""
         />
-        Bow-Meow</a
+        <h1>Bow-Meow</h1></a
       >
 
       <!-- Links -->
@@ -79,9 +79,14 @@
     <div class="container-fluid">
       <div id="content">{% block content %}{% endblock %}</div>
     </div>
-    <div id="footer">
-      {% block footer %} &copy; Copyright 2022 by
-      <a href="/">Bow-Meow</a>. {% endblock %}
-    </div>
+    <footer class="footer mt-auto py-3 bg-light">
+      <div>
+        {% block footer %}
+        <span class="text-muted"
+          >&copy; Copyright 2022 by <a href="/">Bow-Meow</a>.</span
+        >
+        {% endblock %}
+      </div>
+    </footer>
   </body>
 </html>
