@@ -9,7 +9,7 @@ import datetime
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response, abort
 from dotenv import load_dotenv
 import os 
 from pymongo import MongoClient
@@ -17,6 +17,7 @@ from bson import json_util, ObjectId
 import json
 import certifi
 from math import ceil
+import gridfs 
 
 ca = certifi.where()
 
@@ -29,13 +30,42 @@ client = MongoClient(os.environ.get('DB_URL'), tlsCAFile=ca)
 db = client.sparta
 
 
-#################################
-##  HTML을 주는 부분             ##
-#################################
-@app.route('/login')
-def login():
-    msg = request.args.get("msg")
-    return render_template('login.html', msg=msg)
+# [로그인 API]
+# id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
+@app.route('/auth/login', methods=['GET'])
+def api_login_get():
+    return render_template('login.html')
+
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+
+    # email, 암호화된pw을 가지고 해당 유저를 찾습니다.
+    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
+
+    # 찾으면 JWT 토큰을 만들어 발급합니다.
+    if result is not None:
+        # JWT 토큰에는, payload와 시크릿키가 필요합니다.
+        # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
+        # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
+        # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+        # token을 줍니다.
+        return jsonify({'result': 'success', 'token': token})
+    # 찾지 못하면
+    else:
+        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
 
 
 @app.route('/register')
@@ -140,6 +170,25 @@ def posts_post():
         return jsonify({'msg': '등록이 완료되었습니다.'})
 
 
+# 게시글 등록-이미지파일 저장    
+# [POST] /api/posts
+@app.route("/api/posts/fileUpload", methods=["POST"])
+def upload():
+    ## file upload ##
+    img = request.files['image']
+
+    ## GridFs를 통해 파일을 분할하여 DB에 저장하게 된다
+    fs = gridfs.GridFS(db)
+
+    ## 파일을 저장한다
+    fileObjectId = fs.put(img, filename = 'name')
+    fileId = json.loads(json_util.dumps(fileObjectId))['$oid']
+
+    print(fileId)
+    
+    return jsonify({'fileId': fileId})
+
+
 # 게시글 상세 조회
 # GET /api/posts/:id
 @app.route('/api/posts/<string:id>')
@@ -151,6 +200,7 @@ def detail(id):
         return jsonify({'msg': '조회에 실패하였습니다.'})
     else:
         return render_template('details.html', data=result)
+
 
 
 # 댓글기능
@@ -167,7 +217,7 @@ def comment_post():
     }
     db.comment.insert_one(doc)
 
-    return jsonify({'msg': '제보 완료!'})
+    return jsonify({'msg': '댓글 작성이 완료되었습니다.'})
 
 
 @app.route("/comments/<string:postId>", methods=["GET"])

@@ -2,14 +2,90 @@
 head %} {{ super() }}
 
 <style type="text/css">
-    .important {
-        color: #336699;
-    }
-</style>
+  .important {
+    color: #336699;
+  }
 
+  .image-box {
+    text-align: center;
+  }
+</style>
+<script>
+  const path = window.location.pathname;
+  let post_id = "";
+  if (path.split("/api/posts/")[1] !== undefined) {
+    post_id = path.split("/api/posts/")[1].toString();
+  }
+
+  $(document).ready(function () {
+    show_comment(post_id);
+  });
+
+  function save_comment() {
+    let name = $("#name").val();
+    let comment = $("#comment").val();
+
+    $.ajax({
+      type: "POST",
+      url: "/comments",
+      data: {
+        postId_give: post_id,
+        nickname_give: name,
+        comment_give: comment,
+      },
+      success: function (response) {
+        alert(response["msg"]);
+        window.location.reload();
+      },
+    });
+  }
+
+  function show_comment(postId) {
+    $.ajax({
+      type: "GET",
+      url: `/comments/${postId}`,
+      data: { postId: postId },
+      success: function (response) {
+        let rows = response["lists"];
+        for (let i = 0; i < rows.length; i++) {
+          let nickname = rows[i]["nickname"];
+          let comment = rows[i]["comment"];
+
+          let temp_html = `<div class="card">
+                                            <div class="card-body">
+                                                <blockquote class="blockquote mb-0">
+                                                    <p>${comment}</p>
+                                                    <footer class="blockquote-footer">${nickname}</footer>
+                                                </blockquote>
+                                            </div>
+                                        </div>`;
+          $("#comment-list").append(temp_html);
+        }
+      },
+    });
+  }
+</script>
 {% endblock %} {% block content %} {% block navbar %}{% endblock %}
 <!--images-->
-<div id="carouselExampleIndicators" class="carousel slid float-start" data-bs-ride="true" style="
+<div class="image-box">
+  <a href="/api/files/{{ data.petInfo.imageFileId }}"
+    >{{ data.petInfo.imageFileId }}</a
+  >
+  {% if data.petInfo.imageUrl %}
+  <img
+    src="{{ data.petInfo.imageUrl }}"
+    class="card-img-top"
+    alt="test image"
+  />
+  {% else %}
+  <img
+    src="/static/img/puppy-gd9b77039c_640.jpg"
+    class="card-img-top"
+    alt="test image"
+  />
+  {% endif %}
+</div>
+<!-- <div id="carouselExampleIndicators" class="carousel slid float-start" data-bs-ride="true" style="
     max-width: 900px;
     width: 95%;
     max-height: 1000px;
@@ -45,58 +121,65 @@ head %} {{ super() }}
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
-</div>
+</div> -->
 
 <!--right description-->
-<table class="table" style="
+<table
+  class="table"
+  style="
     max-width: 800px;
     width: 95%;
     max-height: 1000px;
     height: 100%;
     margin: 20px 20px 60px 20px;
-  ">
-    <thead>
-        <tr>
-            <th scope="col" class="h1 text-center" style="width: 33.3%; height: 100px">
-                [{{ data.basicInfo.type }}]
-            </th>
-            <th scope="col" class="h1">{{ data.petInfo.typeDetail }}</th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        <tr>
-            <th scope="row">성별</th>
-            <td>{{ data.petInfo.sex }}</td>
-        </tr>
-        <tr>
-            <th scope="row">나이</th>
-            <td>{{ data.petInfo.age }}살</td>
-        </tr>
-        <tr>
-            <th scope="row">몸무게</th>
-            <td colspan="2">{{ data.petInfo.weight }}kg</td>
-        </tr>
-        <tr>
-            <th scope="row">실종일</th>
-            <td colspan="2">{{ data.basicInfo.date }}</td>
-        </tr>
-        <tr>
-            <th scope="row">실종장소</th>
-            <td colspan="2">{{ data.basicInfo.location }}</td>
-        </tr>
-        <tr>
-            <th scope="row">연락처</th>
-            <td colspan="2">{{ data.basicInfo.tel }}</td>
-        </tr>
-    </tbody>
+  "
+>
+  <thead>
+    <tr>
+      <th
+        scope="col"
+        class="h1 text-center"
+        style="width: 33.3%; height: 100px"
+      >
+        [{{ data.basicInfo.type }}]
+      </th>
+      <th scope="col" class="h1">{{ data.petInfo.typeDetail }}</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    <tr>
+      <th scope="row">성별</th>
+      <td>{{ data.petInfo.sex }}</td>
+    </tr>
+    <tr>
+      <th scope="row">나이</th>
+      <td>{{ data.petInfo.age }}살</td>
+    </tr>
+    <tr>
+      <th scope="row">몸무게</th>
+      <td colspan="2">{{ data.petInfo.weight }}kg</td>
+    </tr>
+    <tr>
+      <th scope="row">실종일</th>
+      <td colspan="2">{{ data.basicInfo.date }}</td>
+    </tr>
+    <tr>
+      <th scope="row">실종장소</th>
+      <td colspan="2">{{ data.basicInfo.location }}</td>
+    </tr>
+    <tr>
+      <th scope="row">연락처</th>
+      <td colspan="2">{{ data.basicInfo.tel }}</td>
+    </tr>
+  </tbody>
 </table>
 
 <!--특징 및 상세설명-->
 <div class="card" style="width: 95%; margin: 20px 20px 20px 20px">
-    <h5 class="card-header">상세 설명</h5>
-    <div class="card-body" style="height: 300px">
-        <p class="card-text">{{ data.petInfo.details }}</p>
-    </div>
+  <h5 class="card-header">상세 설명</h5>
+  <div class="card-body" style="height: 300px">
+    <p class="card-text">{{ data.petInfo.details }}</p>
+  </div>
 </div>
 
 <h2 class="detailsh2">발견하시거나 아는 것이 있으시면 댓글을 남겨주세요</h2>
@@ -104,19 +187,28 @@ head %} {{ super() }}
 <!--댓글 남기기-->
 <div class="objectId" id="object_id">{{ data._id }}</div>
 <div class="mypost" style="width: 95%; margin: 20px 20px 20px 20px">
-    <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="name" placeholder="url" />
-        <label for="floatingInput">닉네임</label>
-    </div>
-    <div class="form-floating">
-        <textarea class="form-control" placeholder="Leave a comment here" id="comment" style="height: 100px"></textarea>
-        <label for="floatingTextarea2">댓글을 남겨주세요</label>
-    </div>
-    <div style="width: 95%; height: 50px; margin: 20px 20px 20px 20px">
-        <button onclick="save_comment()" type="button" class="btn btn-success float-end m-2 mb-2">
-            댓글 남기기
-        </button>
-    </div>
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="name" placeholder="url" />
+    <label for="floatingInput">닉네임</label>
+  </div>
+  <div class="form-floating">
+    <textarea
+      class="form-control"
+      placeholder="Leave a comment here"
+      id="comment"
+      style="height: 100px"
+    ></textarea>
+    <label for="floatingTextarea2">댓글을 남겨주세요</label>
+  </div>
+  <div style="width: 95%; height: 50px; margin: 20px 20px 20px 20px">
+    <button
+      onclick="save_comment()"
+      type="button"
+      class="btn btn-success float-end m-2 mb-2"
+    >
+      댓글 남기기
+    </button>
+  </div>
 </div>
 
 <!--댓글 조회-->

@@ -49,6 +49,11 @@
       return false;
     }
 
+    // if ($("#imageFile").val() == "") {
+    //   alert("이미지파일을 첨부해주세요.");
+    //   return false;
+    // }
+
     return true;
   }
 
@@ -60,11 +65,10 @@
     return res;
   }
 
-  function savePost() {
-    // 입력값 검증
-
+  function startSavePost() {
+    let fileId; // 파일아이디
     // [요청 json 데이터 선언]
-    const jsonData = {
+    let jsonData = {
       basicInfo: {
         type: $("#reportType option:selected").val(),
         date: $("#reportDate").val(),
@@ -78,23 +82,61 @@
         age: $("#age").val(),
         weight: $("#weight").val(),
         details: $("#details").val(),
+        imageUrl: $("#animalImage").val(),
+        imageFileId: "",
       },
     };
-
+    // 입력값 검증
     const valid = validation(jsonData);
 
     if (valid && confirm("등록하시겠습니까?")) {
-      $.ajax({
-        type: "POST",
-        url: "/api/posts",
-        data: JSON.stringify(jsonData), //전송 데이터
-        contentType: "application/json; charset=utf-8", //헤더의 Content-Type을 설정
-        success: function (response) {
-          alert(response["msg"]);
-          window.location.href = "/";
-        },
-      });
+      // const formData = new FormData($("#imageFile")[0][1]);
+      // const file = $("#imageFile")[0].files[0];
+      // formData.append("image", file);
+
+      // 이미지파일저장
+      // $.ajax({
+      //   type: "POST",
+      //   url: `/api/posts/fileUpload`,
+      //   data: formData,
+      //   processData: false,
+      //   contentType: false,
+      //   success: function (response) {
+      //     fileId = response["fileId"];
+      //   },
+      //   error: function (jqXHR, textStatus, errorThrown) {
+      //     console.log(jqXHR); //응답 메시지
+      //     console.log(textStatus); //"error"로 고정인듯함
+      //     console.log(errorThrown);
+      //   },
+      // })
+      //   .done((data) => {
+      //     savePost(jsonData, fileId);
+      //   })
+      //   .fail((xhr, status, error) => {
+      //     console.log(xhr); //응답 메시지
+      //     console.log(status); //"error"로 고정인듯함
+      //     console.log(error);
+      //   });
+      savePost(jsonData, "");
     }
+  }
+
+  function savePost(jsonData, fileId) {
+    // 전달받은 파일아이디를 게시글데이터에 추가한다
+    jsonData.petInfo.imageFileId = fileId;
+
+    // 전송
+    $.ajax({
+      type: "POST",
+      url: "/api/posts",
+      data: JSON.stringify(jsonData), //전송 데이터
+      contentType: "application/json; charset=utf-8", //헤더의 Content-Type을 설정
+      success: function (response) {
+        alert(response["msg"]);
+        window.location.href = "/";
+      },
+    });
   }
 </script>
 {% endblock %} {% block content %}
@@ -226,6 +268,26 @@
       <input type="number" class="form-control" id="weight" />
     </div>
     <div class="col-md-12">
+      <label for="weight" class="form-label">이미지 URL</label>
+      <input
+        type="url"
+        class="form-control"
+        name="animalImage"
+        id="animalImage"
+      />
+    </div>
+    <!-- <div class="col-md-12">
+      <label>이미지 첨부</label>
+      <input
+        type="file"
+        name="image"
+        class="form-control is-invalid"
+        id="imageFile"
+        placeholder=""
+        required
+      />
+    </div> -->
+    <div class="col-md-12">
       <label for="details" class="form-label">상세내용</label>
       <textarea
         class="form-control"
@@ -236,7 +298,7 @@
       ></textarea>
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" type="submit" onclick="savePost()">
+      <button class="btn btn-primary" type="submit" onclick="startSavePost()">
         등록하기
       </button>
     </div>

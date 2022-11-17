@@ -43,11 +43,19 @@ head %} {{ super() }}
   {% for data in datas %}
   <div class="col">
     <div class="card h-100" onclick="goToPostDetail()">
+      {% if data.petInfo.imageUrl %}
+      <img
+        src="{{ data.petInfo.imageUrl }}"
+        class="card-img-top"
+        alt="test image"
+      />
+      {% else %}
       <img
         src="static/img/puppy-gd9b77039c_640.jpg"
         class="card-img-top"
         alt="test image"
       />
+      {% endif %}
       <div class="card-body">
         <span id="postId" style="display: none">{{ data['_id']['$oid'] }}</span>
         <h5 class="card-title">

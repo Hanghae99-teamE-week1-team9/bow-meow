@@ -23,7 +23,7 @@
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
     ),
-    url("http://127.0.0.1:5000/static/img/puppy-gd9b77039c_640.jpg");
+    url("/static/img/puppy-gd9b77039c_640.jpg");
   background-position: center;
   background-size: cover;
 
@@ -73,19 +73,17 @@
 
 /*end of details page*/
 
-
 /*register page*/
-.important {
-  color: #336699;
-}
+
 
 .section {
-  max-width: 550px;
+  max-width: 500px;
   height: 500px;
 
 
   margin: 200px auto;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
+  box-shadow: 0px 0px 7px 0px rgb(204, 204, 204);
 
   padding: 0px;
 }
@@ -94,13 +92,13 @@
   display: inline-block;
   vertical-align: middle;
   width: 350px;
-  padding-top: 90px;
+  padding-top: 100px;
   
 }
 
 .button {
   margin: auto;
-  width: 170px;
+  width: 167px;
 }
 #userpw {
   margin-right: 10px;
@@ -110,10 +108,33 @@
 .is-hidden {
   display: none!important;
 }
-.field p {
-  color: red;
+.field span {
+  color: rgb(7, 156, 32);
   font-size: 12px;
   padding-top: 10px;
 }
 
+#userid {
+  margin-bottom: 5px;
+  box-shadow: 0px 0px 3px 0px rgb(204, 204, 204);
+}
+
+#userpw {
+  margin-top: 10px;
+  box-shadow: 0px 0px 3px 0px rgb(204, 204, 204);
+}
+
+#userpw2 {
+  margin-top: 10px; margin-bottom: 5px;
+  box-shadow: 0px 0px 3px 0px rgb(204, 204, 204);
+}
+
+#usernick {
+  margin-top: 10px;
+  box-shadow: 0px 0px 3px 0px rgb(204, 204, 204);
+}
+
+.is-horizontal {
+  width: 340px;
+}
 /*end of register page*/

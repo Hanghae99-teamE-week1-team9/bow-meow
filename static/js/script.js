@@ -1,6 +1,9 @@
 /*details script*/
 const path = window.location.pathname;
-var post_id = path.split("/api/posts/")[1].toString();
+var post_id = "";
+if (path.split("/api/posts/")[1] !== undefined) {
+  post_id = path.split("/api/posts/")[1].toString();
+}
 
 $(document).ready(function () {
   show_comment(post_id);
