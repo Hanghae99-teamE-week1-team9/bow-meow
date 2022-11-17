@@ -1,31 +1,36 @@
 {% extends "base.html" %} {% block title %}Index{% endblock %} {% block head %}
 {{ super() }}
 
-{% endblock %} {% block content %}  {% block navbar %} {% endblock %}
+{% endblock %} {% block content %} {% block navbar %} {% endblock %}
 <script>
     // 입력값 검증
     function validateInput() {
-       if( $('#userid').val() == '') {
+        if ($('#userid').val() == '') {
             alert("아이디를 입력해주세요.");
             return false;
-       } 
+        }
 
-       if( $('#userpw').val() == '') {
+        if ($('#userpw').val() == '') {
             alert("비밀번호를 입력해주세요.");
             return false;
-       } 
+        }
 
-       if( $('#userpw2').val() == '') {
+        if ($('#userpw2').val() == '') {
             alert("비밀번호 확인을 해주세요.");
             return false;
-       } 
-       return true;
+        }
+
+        if ($('#usernick').val() == '') {
+            alert("닉네임을 입력해주세요.");
+            return false;
+        }
+        return true;
     }
 
     // 간단한 회원가입 함수입니다.
     // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
     function register() {
-        if(validateInput()) {
+        if (validateInput()) {
             $.ajax({
                 type: "POST",
                 url: "/api/register",
@@ -39,7 +44,7 @@
     }
 
     //hiddin 아직 적용 안 됨
-    function toggle_sign_up() {  
+    function toggle_sign_up() {
         $("#sign-up-box").toggleClass("is-hidden")
     }
     function toggle_sign_up() {
@@ -50,26 +55,27 @@
         $("#help-password").toggleClass("is-hidden")
         $("#help-password2").toggleClass("is-hidden")
     }
-    
+
     //password 아직 적용 안 됨
     function is_nickname(asValue) {
         let regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
         return regExp.test(asValue);
     }
-    
+
     function is_password(asValue) {
         let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
         return regExp.test(asValue);
     }
-    
+
     //password 재확인
     function validation() {
         let password = $("#userpw").val();
         let samePassword = $("#userpw2").val();
+        let nickname = $('#usernick').val()
 
-        if (password === samePassword) {
+        if (password === samePassword && nickname != '') {
             alert('회원가입이 완료되었습니다.')
-            window.location.href ='/auth/login'
+            window.location.href = '/auth/login'
             return false;
         } else {
             alert('패스워드가 일치하지 않습니다.')
@@ -88,13 +94,8 @@
     <div class="container">
         <div class="mb-5 row">
             <form name="joinform" class="userjoin" action="/register" method="post" onsubmit="return validation()">
-                <input
-                    type="text"
-                    class="form-control is-invalid"
-                    id="userid"
-                    placeholder="아이디 입력" minlength="3" maxlength="15"
-                    required
-                />
+                <input type="text" class="form-control is-invalid" id="userid" placeholder="아이디 입력" minlength="3"
+                    maxlength="15" required />
                 <div id="emailHelp" class="invalid-feedback">
                     * 아이디는 3~15자의 대소문자, 숫자로 입력 가능합니다.
                 </div>
@@ -103,15 +104,10 @@
                 <span class="check">
                     * 아이디는 3~15자의 대소문자, 숫자로 입력 가능합니다.
                 </span> -->
-                <input
-                    type="password"
-                    class="form-control is-invalid"
-                    id="userpw"
-                    placeholder="비밀번호 입력"
-                    minlength="8" maxlength="20"
-                    required
-                />
-                <input type="password" class="form-control is-invalid" id="userpw2" placeholder="비밀번호 확인" minlength="8" maxlength="20" required onkeyup="checkConfirmPass(this.value)">
+                <input type="password" class="form-control is-invalid" id="userpw" placeholder="비밀번호 입력" minlength="8"
+                    maxlength="20" required />
+                <input type="password" class="form-control is-invalid" id="userpw2" placeholder="비밀번호 확인" minlength="8"
+                    maxlength="20" required onkeyup="checkConfirmPass(this.value)">
                 <div id="check2" class="invalid-feedback">
                     * 비밀번호는 8~20자의 대소문자, 숫자로 입력 가능합니다.
                 </div>
@@ -120,15 +116,15 @@
                 <span class="check" id="check2">
                     * 비밀번호는 8~20자의 대소문자, 숫자로 입력 가능합니다.
                 </span> -->
-                <input type="text" class="form-control" id="usernick" placeholder="닉네임" maxlength="10">
+                <input type="text" class="form-control is-invalid" id="usernick" placeholder="닉네임" maxlength="10"
+                    required />
                 <!-- <input type="text" class="input" id="usernick" placeholder="Nickname" maxlength="10"> -->
-            </div>
-            <button class="btn btn-primary" onclick="register()" type="submit">회원가입</button>
-            
+        </div>
+        <button class="btn btn-primary" onclick="register()" type="submit">회원가입</button>
+
         </form>
         <button class="btn btn-secondary" onclick="goToLoginPage()">취소</button>
     </div>
 </div>
-    
-{% endblock %}
 
+{% endblock %}
