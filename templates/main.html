@@ -36,6 +36,7 @@ head %} {{ super() }}
 </div>
 
 <!--card section-->
+<section id="card-section">
 <div class="row row-cols-1 row-cols-md-4 g-4 m-1" id="list-box">
   <!-- 반복되는 구간 -->
   {% for data in datas %}
@@ -66,7 +67,8 @@ head %} {{ super() }}
   {% endfor %}
   <!-- 반복되는 구간 끝 -->
 </div>
-<div>
+</section>
+<div class="page-num">
   <!-- 페이지네이션을 위한 코드 시작 -->
   {% if block_start - 1 > 0 %}
   <a href="{{url_for('posts_list_get', page=block_start - 1)}}">[이전]</a>
