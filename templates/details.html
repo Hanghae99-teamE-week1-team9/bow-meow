@@ -9,7 +9,7 @@ head %} {{ super() }}
   .image-box {
     text-align: center;
     max-width: 800px;
-    margin-top: 50px;
+    margin: 50px 20px;
   }
 </style>
 <script>
@@ -68,22 +68,7 @@ head %} {{ super() }}
   }
 </script>
 {% endblock %} {% block content %} {% block navbar %}{% endblock %}
-<!--images-->
-<div class="image-box">
-  {% if data.petInfo.imageUrl %}
-  <img
-    src="{{ data.petInfo.imageUrl }}"
-    class="card-img-top"
-    alt="test image"
-  />
-  {% else %}
-  <img
-    src="/static/img/puppy-gd9b77039c_640.jpg"
-    class="card-img-top"
-    alt="test image"
-  />
-  {% endif %}
-</div>
+
 <!-- <div id="carouselExampleIndicators" class="carousel slid float-start" data-bs-ride="true" style="
     max-width: 900px;
     width: 95%;
@@ -121,96 +106,116 @@ head %} {{ super() }}
         <span class="visually-hidden">Next</span>
     </button>
 </div> -->
+<div class="container-lg">
+  <!--images-->
+  <div class="image-box">
+    {% if data.petInfo.imageUrl %}
+    <img
+      src="{{ data.petInfo.imageUrl }}"
+      class="card-img-top"
+      alt="test image"
+    />
+    {% else %}
+    <img
+      src="/static/img/puppy-gd9b77039c_640.jpg"
+      class="card-img-top"
+      alt="test image"
+    />
+    {% endif %}
+  </div>
+  <!--right description-->
+  <table
+    class="table"
+    style="
+      max-width: 800px;
+      width: 95%;
+      max-height: 1000px;
+      height: 100%;
+      margin: 20px 20px 60px 20px;
+    "
+  >
+    <thead>
+      <tr>
+        <th
+          scope="col"
+          class="h1 text-center"
+          style="width: 33.3%; height: 100px"
+        >
+          [{{ data.basicInfo.type }}]
+        </th>
+        <th scope="col" class="h1">{{ data.petInfo.typeDetail }}</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr>
+        <th scope="row">성별</th>
+        <td>{{ data.petInfo.sex }}</td>
+      </tr>
+      <tr>
+        <th scope="row">나이</th>
+        <td>{{ data.petInfo.age }}살</td>
+      </tr>
+      <tr>
+        <th scope="row">몸무게</th>
+        <td colspan="2">{{ data.petInfo.weight }}kg</td>
+      </tr>
+      <tr>
+        <th scope="row">실종일</th>
+        <td colspan="2">{{ data.basicInfo.date }}</td>
+      </tr>
+      <tr>
+        <th scope="row">실종장소</th>
+        <td colspan="2">{{ data.basicInfo.location }}</td>
+      </tr>
+      <tr>
+        <th scope="row">연락처</th>
+        <td colspan="2">{{ data.basicInfo.tel }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-<!--right description-->
-<table
-  class="table"
-  style="
-    max-width: 800px;
-    width: 95%;
-    max-height: 1000px;
-    height: 100%;
-    margin: 20px 20px 60px 20px;
-  "
->
-  <thead>
-    <tr>
-      <th
-        scope="col"
-        class="h1 text-center"
-        style="width: 33.3%; height: 100px"
+  <!--특징 및 상세설명-->
+  <div
+    class="card"
+    style="width: 95%; margin: 20px 20px 20px 20px"
+    id="detail-box"
+  >
+    <h5 class="card-header">상세 설명</h5>
+    <div class="card-body" style="height: 300px">
+      <p class="card-text">{{ data.petInfo.details }}</p>
+    </div>
+  </div>
+
+  <h2 class="detailsh2">발견하시거나 아는 것이 있으시면 댓글을 남겨주세요</h2>
+
+  <!--댓글 남기기-->
+  <div class="mypost" style="width: 95%; margin: 20px 20px 20px 20px">
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="name" placeholder="url" />
+      <label for="floatingInput">닉네임</label>
+    </div>
+    <div class="form-floating">
+      <textarea
+        class="form-control"
+        placeholder="Leave a comment here"
+        id="comment"
+        style="height: 100px"
+      ></textarea>
+      <label for="floatingTextarea2">댓글을 남겨주세요</label>
+    </div>
+    <div style="width: 95%; height: 50px; margin: 20px 20px 20px 20px">
+      <button
+        onclick="save_comment()"
+        type="button"
+        class="btn btn-success float-end m-2 mb-2"
       >
-        [{{ data.basicInfo.type }}]
-      </th>
-      <th scope="col" class="h1">{{ data.petInfo.typeDetail }}</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-    <tr>
-      <th scope="row">성별</th>
-      <td>{{ data.petInfo.sex }}</td>
-    </tr>
-    <tr>
-      <th scope="row">나이</th>
-      <td>{{ data.petInfo.age }}살</td>
-    </tr>
-    <tr>
-      <th scope="row">몸무게</th>
-      <td colspan="2">{{ data.petInfo.weight }}kg</td>
-    </tr>
-    <tr>
-      <th scope="row">실종일</th>
-      <td colspan="2">{{ data.basicInfo.date }}</td>
-    </tr>
-    <tr>
-      <th scope="row">실종장소</th>
-      <td colspan="2">{{ data.basicInfo.location }}</td>
-    </tr>
-    <tr>
-      <th scope="row">연락처</th>
-      <td colspan="2">{{ data.basicInfo.tel }}</td>
-    </tr>
-  </tbody>
-</table>
-
-<!--특징 및 상세설명-->
-<div class="card" style="width: 95%; margin: 20px 20px 20px 20px">
-  <h5 class="card-header">상세 설명</h5>
-  <div class="card-body" style="height: 300px">
-    <p class="card-text">{{ data.petInfo.details }}</p>
+        댓글 남기기
+      </button>
+    </div>
   </div>
+
+  <!--댓글 조회-->
+  <div class="mycards" id="comment-list"></div>
 </div>
-
-<h2 class="detailsh2">발견하시거나 아는 것이 있으시면 댓글을 남겨주세요</h2>
-
-<!--댓글 남기기-->
-<div class="objectId" id="object_id">{{ data._id }}</div>
-<div class="mypost" style="width: 95%; margin: 20px 20px 20px 20px">
-  <div class="form-floating mb-3">
-    <input type="text" class="form-control" id="name" placeholder="url" />
-    <label for="floatingInput">닉네임</label>
-  </div>
-  <div class="form-floating">
-    <textarea
-      class="form-control"
-      placeholder="Leave a comment here"
-      id="comment"
-      style="height: 100px"
-    ></textarea>
-    <label for="floatingTextarea2">댓글을 남겨주세요</label>
-  </div>
-  <div style="width: 95%; height: 50px; margin: 20px 20px 20px 20px">
-    <button
-      onclick="save_comment()"
-      type="button"
-      class="btn btn-success float-end m-2 mb-2"
-    >
-      댓글 남기기
-    </button>
-  </div>
-</div>
-
-<!--댓글 조회-->
-<div class="mycards" id="comment-list"></div>
 
 {% endblock %}
