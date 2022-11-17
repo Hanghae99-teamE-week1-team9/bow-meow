@@ -155,10 +155,10 @@ input:hover {
   margin: 20px 20px 20px 20px;
 }
 
-.objectId {
-  visibility: hidden;
+#detail-box .card-body,
+#comment-list .card-body {
+  display: block;
 }
-
 /*end of details page*/
 
 /*register page*/
@@ -166,7 +166,7 @@ input:hover {
 .section {
   /* max-width: 500px; */
   height: 600px;
-   margin: 200px auto;
+  /* margin: 200px auto; */
   /* border: 1px solid #ccc; */
   /* box-shadow: 0px 0px 7px 0px rgb(204, 204, 204); */
   /* padding: 0px; */
