@@ -1,10 +1,48 @@
-/*main page*/
 @import url("https://fonts.googleapis.com/css2?family=Gugi&display=swap");
 
 * {
   font-family: "Gugi", cursive;
 }
 
+/* base */
+.navbar-center {
+  width: 1250px;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+}
+
+.container-fluid {
+  padding: 0px;
+}
+
+.navbar-nav {
+  width: 200px;
+  float: right;
+}
+
+.nav-link > button:hover {
+  filter: brightness(0.9);
+}
+
+.footer-block {
+  width: 1250px;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+input:hover {
+  filter: brightness(0.982);
+}
+/*end of base*/
+
+/*main page*/
 .top-desc {
   width: 100%;
   height: 200px;
@@ -16,9 +54,9 @@
 }
 
 .main-banner {
-  margin: 10px auto 10px auto;
+  /* margin: 10px auto 10px auto; */
   width: 100%;
-  height: 400px;
+  height: 480px;
 
   background-image: linear-gradient(
       0deg,
@@ -40,6 +78,51 @@
 .navbar-brand h1 {
   display: inline-block;
 }
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+}
+
+.page-num {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-num b {
+  margin-right: 15px;
+  font-size: 17px;
+}
+
+.page-num a {
+  margin-right: 15px;
+  color: gray;
+  text-decoration: none;
+}
+.page-num a:hover {
+  color: rgb(66, 66, 66);
+}
+
+#card-section {
+  max-width: 1250px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.card-img-top:hover {
+  filter: brightness(0.9);
+}
+
 /*end of main page*/
 
 /*details page*/
@@ -82,8 +165,8 @@
 
 .section {
   /* max-width: 500px; */
-  height: 500px;
-  /* margin: 200px auto; */
+  height: 600px;
+   margin: 200px auto;
   /* border: 1px solid #ccc; */
   /* box-shadow: 0px 0px 7px 0px rgb(204, 204, 204); */
   /* padding: 0px; */
