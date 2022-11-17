@@ -1,77 +1,76 @@
-{% extends "base.html" %} {% block title %}login page{% endblock %} {% block head %}
-    {{ super() }}
-    <style>
-
-    .cover {
+{% extends "base.html" %} {% block title %}로그인{% endblock %} {% block head %}
+{{ super() }}
+<style>
+  .cover {
     display: flex;
     flex-direction: column;
+  }
 
-}
-
-.head {
+  .head {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
 
-}
-
-.headDesc {
+  .headDesc {
     margin-bottom: 10px;
-}
+  }
 
-.loginArea {
+  .loginArea {
     display: flex;
     justify-content: flex-start;
     padding-top: 64px;
-    padding-left: 64px;
+    /* padding-left: 64px; */
     margin-top: 80px;
     margin-left: auto;
     margin-right: auto;
-    border: solid 1px red;
+    /* border: solid 1px red; */
     width: 622px;
     height: 350px;
     /*left: 94px;*/
     /*top: 60px;*/
+  }
 
-}
-
-.loginBoxH {
+  .loginBoxH {
     margin-bottom: 43px;
     font-size: 24px;
-}
+    text-align: center;
+  }
 
-.loginBox {
+  .loginBox {
     border-bottom: 1px;
+    margin: 0 auto;
+    width: 300px;
+  }
 
-}
-
-
-.loginInfo {
-
+  .loginBox label {
+    text-align: left;
+  }
+  .loginInfo {
     margin-bottom: 24px;
-}
+  }
 
-.loginBtn {
+  .loginBtn {
+    margin-top: 50px;
+    text-align: center;
+  }
 
-}
-
-.loginBtn > button {
+  .loginBtn > button {
     width: 130px;
     height: 40px;
     margin-right: 10px;
     font-size: 15px;
-}
+  }
 
-.lowDesc {
+  .lowDesc {
     display: flex;
     justify-content: center;
 
     font-size: 30px;
     margin-top: 147px;
+  }
 
-}
-
-.lowBtn > button {
+  .lowBtn > button {
     width: 192px;
     height: 52px;
     left: 1107px;
@@ -79,88 +78,106 @@
 
     font-size: 17px;
     margin-right: 45px;
-}
+  }
 
-.helpDesc {
+  .helpDesc {
     margin-right: 84px;
-}
+  }
+</style>
+<script>
+  function login() {
+    $.ajax({
+      type: "POST",
+      url: "/api/login",
+      data: { id_give: $("#userid").val(), pw_give: $("#userpw").val() },
+      success: function (response) {
+        if (response["result"] == "success") {
+          // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+          // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+          $.cookie("mytoken", response["token"]);
 
-    </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-
-      function login() {
-                $.ajax({
-                    type: "POST",
-                    url: "/api/login",
-                    data: {id_give: $('#userId').val(), pw_give: $('#userpw').val()},
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
-                            // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
-                            $.cookie('mytoken', response['token']);
-
-                            alert('로그인 완료!')
-                            window.location.href = '/'
-                        } else {
-                            // 로그인이 안되면 에러메시지를 띄웁니다.
-                            alert(response['msg'])
-                        }
-                    }
-                })
-            }
-
-        function logout() {
-            $.removeCookie('mytoken');
-            alert('로그아웃!')
-            window.location.href = '/login'
+          alert("로그인 완료!");
+          window.location.href = "/";
+        } else {
+          // 로그인이 안되면 에러메시지를 띄웁니다.
+          alert(response["msg"]);
         }
+      },
+    });
+  }
 
-    </script>
+  function logout() {
+    $.removeCookie("mytoken");
+    alert("로그아웃!");
+    window.location.href = "/login";
+  }
+</script>
 
-{% endblock %}
-{% block content %}
-    <div class="cover">
-        <div class="head">
-            <div class="headDesc" style="font-size: 48px;">Head</div>
-            <div style=" font-size: 36px">Body paragraph Body paragraph Body paragraph Body paragraph<br/> Body
-                paragraph Body paragraph Body paragraph Body paragraph
-            </div>
-        </div>
-
-
-        <div class="loginArea">
-            <div class="loginBox">
-                <div class="loginBoxH"><h3>Log in</h3></div>
-                <div>
-                    <div class="loginInfo">
-                        <input type="text" placeholder="ID" id="userId"
-                               style="width: 494px;height: 40px;"></div>
-                    <div class="loginInfo"><input type="password" placeholder="Password" id="userpw"
-                                                  style="width: 494px;height: 40px;">
-                    </div>
-                </div>
-                <div>
-                    <div class="loginBtn">
-                        <button onclick="login()">Log in</button>
-                        <button onclick="logout()">Logout</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="lowDesc">
-                <div class="helpDesc">Lorem ipsum dolor sit amet, consectetur adipiscing<br/>
-                    elit, sed do eiusmod tempor incididunt ut labore
-                </div>
-                <div class="lowBtn">
-                    <button>유기동물 신고</button>
-                    <button>Contact us</button>
-                </div>
-            </div>
-        </div>
+{% endblock %} {% block content %}
+<div class="cover">
+  <!-- <div class="head">
+    <div class="headDesc" style="font-size: 48px">Head</div>
+    <div style="font-size: 36px">
+      Body paragraph Body paragraph Body paragraph Body paragraph<br />
+      Body paragraph Body paragraph Body paragraph Body paragraph
     </div>
+  </div> -->
+
+  <div>
+    <div class="container">
+      <!-- <div class="loginBoxH"><h3>로그인</h3></div> -->
+      <div>
+        <div class="loginInfo">
+          <input
+            type="text"
+            class="form-control is-invalid"
+            id="userid"
+            placeholder="아이디"
+            required
+          />
+          <!-- <input
+            type="text"
+            placeholder="ID"
+            id="userId"
+            style="width: 494px; height: 40px"
+          /> -->
+        </div>
+        <div class="loginInfo">
+          <input
+            type="password"
+            class="form-control is-invalid"
+            id="userpw"
+            placeholder="비밀번호"
+            required
+          />
+          <!-- <input
+            type="password"
+            placeholder="Password"
+            id="userpw"
+            style="width: 494px; height: 40px"
+          /> -->
+        </div>
+      </div>
+      <div>
+        <div class="loginBtn">
+          <button class="btn btn-primary" onclick="login()">로그인</button>
+          <!-- <button onclick="logout()">Logout</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="lowDesc">
+      <!-- <div class="helpDesc">
+        Lorem ipsum dolor sit amet, consectetur adipiscing<br />
+        elit, sed do eiusmod tempor incididunt ut labore
+      </div>
+      <div class="lowBtn">
+        <button>유기동물 신고</button>
+        <button>Contact us</button>
+      </div> -->
+    </div>
+  </div>
+</div>
 {% endblock %}
-
-

@@ -8,6 +8,8 @@ head %} {{ super() }}
 
   .image-box {
     text-align: center;
+    max-width: 800px;
+    margin-top: 50px;
   }
 </style>
 <script>
@@ -68,9 +70,6 @@ head %} {{ super() }}
 {% endblock %} {% block content %} {% block navbar %}{% endblock %}
 <!--images-->
 <div class="image-box">
-  <a href="/api/files/{{ data.petInfo.imageFileId }}"
-    >{{ data.petInfo.imageFileId }}</a
-  >
   {% if data.petInfo.imageUrl %}
   <img
     src="{{ data.petInfo.imageUrl }}"
