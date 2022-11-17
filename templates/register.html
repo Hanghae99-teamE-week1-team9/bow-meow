@@ -3,19 +3,39 @@
 
 {% endblock %} {% block content %}  {% block navbar %} {% endblock %}
 <script>
+    // 입력값 검증
+    function validateInput() {
+       if( $('#userid').val() == '') {
+            alert("아이디를 입력해주세요.");
+            return false;
+       } 
+
+       if( $('#userpw').val() == '') {
+            alert("비밀번호를 입력해주세요.");
+            return false;
+       } 
+
+       if( $('#userpw2').val() == '') {
+            alert("비밀번호 확인을 해주세요.");
+            return false;
+       } 
+       return true;
+    }
+
     // 간단한 회원가입 함수입니다.
     // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
     function register() {
-
-        $.ajax({
-            type: "POST",
-            url: "/api/register",
-            data: {
-                id_give: $('#userid').val(),
-                pw_give: $('#userpw').val(),
-                nickname_give: $('#usernick').val()
-            }
-        })
+        if(validateInput()) {
+            $.ajax({
+                type: "POST",
+                url: "/api/register",
+                data: {
+                    id_give: $('#userid').val(),
+                    pw_give: $('#userpw').val(),
+                    nickname_give: $('#usernick').val()
+                }
+            })
+        }
     }
 
     //hiddin 아직 적용 안 됨
