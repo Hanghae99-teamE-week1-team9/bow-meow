@@ -123,6 +123,13 @@ input:hover {
   filter: brightness(0.9);
 }
 
+#list-box .card-title {
+  font-size: 18px;
+}
+
+#list-box .card-body {
+  padding: 12px;
+}
 /*end of main page*/
 
 /*details page*/
