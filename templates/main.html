@@ -8,6 +8,10 @@ head %} {{ super() }}
   #list-box > div {
     cursor: pointer;
   }
+
+  #pagination-wrapper {
+    margin-top: 30px;
+  }
 </style>
 <script>
   $(document).ready(function () {});
@@ -66,21 +70,44 @@ head %} {{ super() }}
   {% endfor %}
   <!-- 반복되는 구간 끝 -->
 </div>
-<div>
-  <!-- 페이지네이션을 위한 코드 시작 -->
-  {% if block_start - 1 > 0 %}
-  <a href="{{url_for('posts_list_get', page=block_start - 1)}}">[이전]</a>
-  {% endif %} {% for i in range(block_start, block_end + 1)%}
-  <!-- 데이터가 존재하지 않는 페이지는 화면에 나타내지 않기 위한 조건문 -->
-  {% if i > last_page_num %} {% else %} {% if i == page %}
-  <b>{{ i }}</b>
-  {% else %}
-  <a href="{{url_for('posts_list_get', page=i)}}">{{ i }}</a>
-  {% endif %} {% endif %} {% endfor %} {% if block_end < last_page_num %}
-  <a href="{{url_for('posts_list_get', page=block_end + 1)}}">[다음]</a>
-  {% endif %}
+<nav aria-label="Page navigation example" id="pagination-wrapper">
+  <ul class="pagination justify-content-center">
+    <!-- 페이지네이션을 위한 코드 시작 -->
+    {% if block_start - 1 > 0 %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="{{url_for('posts_list_get', page=block_start - 1)}}"
+        >[이전]</a
+      >
+    </li>
+    {% endif %} {% for i in range(block_start, block_end + 1)%}
+    <!-- 데이터가 존재하지 않는 페이지는 화면에 나타내지 않기 위한 조건문 -->
+    {% if i > last_page_num %} {% else %} {% if i == page %}
+    <li class="page-item">
+      <a class="page-link">{{ i }}</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link" href="{{url_for('posts_list_get', page=i)}}"
+        >{{ i }}</a
+      >
+    </li>
+
+    {% endif %} {% endif %} {% endfor %} {% if block_end < last_page_num %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="{{url_for('posts_list_get', page=block_end + 1)}}"
+        >[다음]</a
+      >
+    </li>
+
+    {% endif %}
+  </ul>
+
   <!-- 페이지네이션을 위한 코드 끝 -->
-</div>
+</nav>
 <div class="card m-5">
   <div class="card-body">
     <h5 class="card-title">유기동물 신고/제보</h5>
